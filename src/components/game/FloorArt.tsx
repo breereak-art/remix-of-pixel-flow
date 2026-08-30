@@ -119,7 +119,7 @@ export function FloorArt({ floor, status, title, percent }: FloorArtProps) {
       {/* ---- room plaque ---- */}
       <div
         className="absolute label-pixel flex items-center gap-2 px-2 py-1 text-[9px]"
-        style={{ left: 244, top: 22, background: "#12161a", color: "#f3e7c6", border: `2px solid ${light}`, boxShadow: `0 0 10px ${light}44` }}
+        style={{ left: 244, top: 16, zIndex: 30, background: "#12161a", color: "#f3e7c6", border: `2px solid ${light}`, boxShadow: `0 0 10px ${light}44` }}
       >
         <span style={{ width: 6, height: 6, background: light, display: "inline-block" }} />
         {title}
@@ -148,7 +148,7 @@ export function FloorArt({ floor, status, title, percent }: FloorArtProps) {
       {/* ---- per-floor interior ---- */}
       {floor.stageId === "research" && (
         <>
-          <Whiteboard x={228} y={30} w={92} h={44} notes={3} />
+          <Whiteboard x={228} y={44} w={92} h={40} notes={3} />
           <Bookshelf x={96} y={124} w={64} h={56} accent={t.trim} />
           <Cabinet x={38} y={150} w={26} h={30} />
           <Desk x={250} y={132} w={130} h={34} />
@@ -163,8 +163,8 @@ export function FloorArt({ floor, status, title, percent }: FloorArtProps) {
 
       {floor.stageId === "drafting" && (
         <>
-          <Whiteboard x={196} y={30} w={100} h={46} notes={5} />
-          <Whiteboard x={368} y={32} w={86} h={42} notes={8} />
+          <Whiteboard x={196} y={44} w={100} h={42} notes={5} />
+          <Whiteboard x={368} y={46} w={86} h={38} notes={8} />
           <Bookshelf x={110} y={128} w={80} h={48} accent={t.trim} />
           <Cabinet x={38} y={150} w={26} h={30} />
           <Desk x={284} y={132} w={150} h={34} />
@@ -183,7 +183,7 @@ export function FloorArt({ floor, status, title, percent }: FloorArtProps) {
 
       {floor.stageId === "writing" && (
         <>
-          <Whiteboard x={214} y={32} w={96} h={42} notes={2} />
+          <Whiteboard x={214} y={44} w={96} h={40} notes={2} />
           <Desk x={110} y={132} w={120} h={34} wood="#6f4c2b" />
           <Monitor x={132} y={110} w={26} h={20} glow="#8ecbff" on={on} />
           <Monitor x={176} y={110} w={26} h={20} glow="#8ecbff" on={on} />
@@ -200,13 +200,13 @@ export function FloorArt({ floor, status, title, percent }: FloorArtProps) {
 
       {floor.stageId === "publish" && (
         <>
-          <Whiteboard x={206} y={34} w={92} h={40} notes={0} />
+          <Whiteboard x={206} y={46} w={92} h={38} notes={0} />
           <Desk x={150} y={136} w={250} h={30} wood="#5f4128" />
           {[168, 226, 284, 340].map((mx, i) => (
             <Monitor key={mx} x={mx} y={114} w={30} h={22} glow={["#4f9fe0", "#b56bff", "#e05fa0", "#5fd6c0"][i]} on={on} />
           ))}
           <Cabinet x={430} y={126} w={80} h={48} />
-          <div className="absolute label-pixel" style={{ left: 442, top: 40, width: 74, padding: 4, background: "#2a2033", border: "2px solid #15191d", color: "#e8dcf5", fontSize: 8 }}>
+          <div className="absolute label-pixel" style={{ left: 442, top: 46, width: 74, padding: 4, background: "#2a2033", border: "2px solid #15191d", color: "#e8dcf5", fontSize: 8 }}>
             3 POSTS
             <div className="absolute" style={{ left: 6, top: 18, display: "flex", gap: 4 }}>
               {[0, 1, 2].map((i) => (
@@ -221,10 +221,10 @@ export function FloorArt({ floor, status, title, percent }: FloorArtProps) {
 
       {basement && (
         <>
-          <DinoSkeleton x={130} y={122} kind="trex" scale={1.05} />
-          <DinoSkeleton x={370} y={126} kind="stego" scale={1} />
-          <DinoSkeleton x={268} y={146} kind="skull" scale={0.9} />
-          <div className="absolute label-pixel" style={{ left: 254, top: 96, padding: 4, background: "#2a201a", border: "2px solid #6b5340", color: "#d8cfae", fontSize: 8, textAlign: "center" }}>
+          <DinoSkeleton x={118} y={104} kind="trex" scale={1.7} />
+          <DinoSkeleton x={378} y={116} kind="stego" scale={1.5} />
+          <DinoSkeleton x={266} y={146} kind="skull" scale={1.2} />
+          <div className="absolute label-pixel" style={{ left: 258, top: 92, zIndex: 20, padding: 4, background: "#2a201a", border: "2px solid #6b5340", color: "#d8cfae", fontSize: 8, textAlign: "center" }}>
             OLD IDEAS
             <br />
             BURIED HERE

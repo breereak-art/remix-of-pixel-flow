@@ -201,9 +201,9 @@ export function GameScene({ stageViews, animate, onEnterStation, modalOpen }: Ga
         </div>
       ))}
       {/* city silhouette */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 flex items-end justify-between opacity-70" style={{ height: "34%" }}>
+      <div className="pointer-events-none absolute left-0 right-0 flex items-end justify-between opacity-80" style={{ bottom: "21%", height: "20%" }}>
         {Array.from({ length: 26 }).map((_, i) => (
-          <div key={i} style={{ flex: 1, height: `${28 + ((i * 37) % 60)}%`, background: i % 2 ? "#2c4a63" : "#24405a", borderTop: "2px solid #1b3145" }} />
+          <div key={i} style={{ flex: 1, height: `${28 + ((i * 37) % 60)}%`, background: i % 2 ? "#31506b" : "#28445e", borderTop: "2px solid #1b3145" }} />
         ))}
       </div>
 
