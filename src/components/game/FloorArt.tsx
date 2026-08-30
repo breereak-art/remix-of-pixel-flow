@@ -203,7 +203,7 @@ export function FloorArt({ floor, status, title, percent }: FloorArtProps) {
           <Whiteboard x={206} y={46} w={92} h={38} notes={0} />
           <Desk x={150} y={136} w={250} h={30} wood="#5f4128" />
           {[168, 226, 284, 340].map((mx, i) => (
-            <Monitor key={mx} x={mx} y={114} w={30} h={22} glow={["#4f9fe0", "#b56bff", "#e05fa0", "#5fd6c0"][i]} on={on} />
+            <Monitor key={mx} x={mx} y={114} w={30} h={22} glow={["#4f9fe0", "#b56bff", "#e05fa0", "#5fd6c0"][i] ?? "#b56bff"} on={on} />
           ))}
           <Cabinet x={430} y={126} w={80} h={48} />
           <div className="absolute label-pixel" style={{ left: 442, top: 46, width: 74, padding: 4, background: "#2a2033", border: "2px solid #15191d", color: "#e8dcf5", fontSize: 8 }}>
