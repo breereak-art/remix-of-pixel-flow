@@ -118,16 +118,18 @@ export function GameScene({ stageViews, animate, onEnterStation, modalOpen }: Ga
     const down = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
       if (target && /^(INPUT|TEXTAREA)$/.test(target.tagName)) return;
-      if (KEYS[e.key]) {
+      const dir = KEYS[e.key];
+      if (dir) {
         e.preventDefault();
-        keys.current.add(KEYS[e.key]);
+        keys.current.add(dir);
       } else if (e.key === "e" || e.key === "E" || e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         interact();
       }
     };
     const up = (e: KeyboardEvent) => {
-      if (KEYS[e.key]) keys.current.delete(KEYS[e.key]);
+      const dir = KEYS[e.key];
+      if (dir) keys.current.delete(dir);
     };
     window.addEventListener("keydown", down);
     window.addEventListener("keyup", up);
