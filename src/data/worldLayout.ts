@@ -123,22 +123,24 @@ const SPAWN_LOCAL_Y = 176;
 export const FLOORS: FloorDef[] = RAW.map((raw, index) => {
   const top = index * FLOOR_H;
   const transitions: Transition[] = [];
-  if (index > 0) {
+  const prev = RAW[index - 1];
+  const next = RAW[index + 1];
+  if (index > 0 && prev) {
     transitions.push({
       id: `${raw.id}-up`,
-      label: `Go up to ${RAW[index - 1].roomName}`,
+      label: `Go up to ${prev.roomName}`,
       direction: "up",
-      targetFloorId: RAW[index - 1].id,
+      targetFloorId: prev.id,
       zone: offset(UP_ZONE, top),
       spawn: { x: SPAWN_X, y: (index - 1) * FLOOR_H + SPAWN_LOCAL_Y },
     });
   }
-  if (index < RAW.length - 1) {
+  if (next) {
     transitions.push({
       id: `${raw.id}-down`,
-      label: `Go down to ${RAW[index + 1].roomName}`,
+      label: `Go down to ${next.roomName}`,
       direction: "down",
-      targetFloorId: RAW[index + 1].id,
+      targetFloorId: next.id,
       zone: offset(DOWN_ZONE, top),
       spawn: { x: SPAWN_X, y: (index + 1) * FLOOR_H + SPAWN_LOCAL_Y },
     });
