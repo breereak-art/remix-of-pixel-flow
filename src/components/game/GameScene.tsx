@@ -159,16 +159,21 @@ export function GameScene({ stageViews, animate, onEnterStation, modalOpen }: Ga
         const floor = FLOOR_BY_ID[floorRef.current];
         const box = { ...posRef.current, ...PLAYER_BOX };
         const next = moveWithCollision(box, dx * PLAYER_SPEED * dt, dy * PLAYER_SPEED * dt, floor.walkable, floor.obstacles);
-        if (next.x !== posRef.current.x || next.y !== posRef.current.y) {
+        const moved = next.x !== posRef.current.x || next.y !== posRef.current.y;
+        if (moved) {
           posRef.current = { x: next.x, y: next.y };
           setPos(posRef.current);
         }
         if (dx > 0) setFacing(1);
         if (dx < 0) setFacing(-1);
         setWalking(true);
+        // 2.1 steps/sec worth of cycle, smooth and frame-rate independent
+        phaseRef.current += dt * 9.2;
+        setPhase(phaseRef.current);
       } else {
         setWalking(false);
       }
+
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
