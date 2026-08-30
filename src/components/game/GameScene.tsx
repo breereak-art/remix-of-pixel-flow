@@ -49,12 +49,15 @@ export function GameScene({ stageViews, animate, onEnterStation, modalOpen }: Ga
   const [floorId, setFloorId] = useState<FloorId>(PLAYER_START.floorId);
   const [facing, setFacing] = useState<1 | -1>(1);
   const [walking, setWalking] = useState(false);
+  const [phase, setPhase] = useState(0);
 
   const posRef = useRef(pos);
   const floorRef = useRef(floorId);
+  const phaseRef = useRef(0);
   const keys = useRef(new Set<string>());
   posRef.current = pos;
   floorRef.current = floorId;
+
 
   useLayoutEffect(() => {
     const el = viewportRef.current;
