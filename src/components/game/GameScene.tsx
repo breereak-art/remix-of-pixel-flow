@@ -49,12 +49,15 @@ export function GameScene({ stageViews, animate, onEnterStation, modalOpen }: Ga
   const [floorId, setFloorId] = useState<FloorId>(PLAYER_START.floorId);
   const [facing, setFacing] = useState<1 | -1>(1);
   const [walking, setWalking] = useState(false);
+  const [phase, setPhase] = useState(0);
 
   const posRef = useRef(pos);
   const floorRef = useRef(floorId);
+  const phaseRef = useRef(0);
   const keys = useRef(new Set<string>());
   posRef.current = pos;
   floorRef.current = floorId;
+
 
   useLayoutEffect(() => {
     const el = viewportRef.current;
@@ -156,16 +159,21 @@ export function GameScene({ stageViews, animate, onEnterStation, modalOpen }: Ga
         const floor = FLOOR_BY_ID[floorRef.current];
         const box = { ...posRef.current, ...PLAYER_BOX };
         const next = moveWithCollision(box, dx * PLAYER_SPEED * dt, dy * PLAYER_SPEED * dt, floor.walkable, floor.obstacles);
-        if (next.x !== posRef.current.x || next.y !== posRef.current.y) {
+        const moved = next.x !== posRef.current.x || next.y !== posRef.current.y;
+        if (moved) {
           posRef.current = { x: next.x, y: next.y };
           setPos(posRef.current);
         }
         if (dx > 0) setFacing(1);
         if (dx < 0) setFacing(-1);
         setWalking(true);
+        // 2.1 steps/sec worth of cycle, smooth and frame-rate independent
+        phaseRef.current += dt * 9.2;
+        setPhase(phaseRef.current);
       } else {
         setWalking(false);
       }
+
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -180,7 +188,25 @@ export function GameScene({ stageViews, animate, onEnterStation, modalOpen }: Ga
         : null;
 
   return (
-    <div ref={viewportRef} className="relative h-full w-full overflow-hidden grain" style={{ background: "#0f1317" }}>
+    <div ref={viewportRef} className="relative h-full w-full overflow-hidden grain" style={{ background: "linear-gradient(180deg,#2f7fc4 0%,#65b3e4 55%,#a9d4ea 78%,#5d7f45 78%,#3f5f33 100%)" }}>
+      {/* clouds */}
+      {[
+        { x: "6%", y: "8%", s: 1 },
+        { x: "72%", y: "5%", s: 1.3 },
+        { x: "40%", y: "16%", s: 0.8 },
+      ].map((c, i) => (
+        <div key={i} className="pointer-events-none absolute" style={{ left: c.x, top: c.y, transform: `scale(${c.s})`, opacity: 0.9 }}>
+          <div className="absolute" style={{ left: 0, top: 8, width: 64, height: 12, background: "#eaf4fb" }} />
+          <div className="absolute" style={{ left: 14, top: 0, width: 34, height: 12, background: "#f6fbfe" }} />
+        </div>
+      ))}
+      {/* city silhouette */}
+      <div className="pointer-events-none absolute left-0 right-0 flex items-end justify-between opacity-80" style={{ bottom: "21%", height: "20%" }}>
+        {Array.from({ length: 26 }).map((_, i) => (
+          <div key={i} style={{ flex: 1, height: `${28 + ((i * 37) % 60)}%`, background: i % 2 ? "#31506b" : "#28445e", borderTop: "2px solid #1b3145" }} />
+        ))}
+      </div>
+
       <div
         className="absolute left-1/2 top-1/2 pixelated"
         style={{
@@ -188,9 +214,20 @@ export function GameScene({ stageViews, animate, onEnterStation, modalOpen }: Ga
           height: WORLD_H,
           transform: `translate(-50%, -50%) scale(${scale})`,
           transformOrigin: "center center",
-          outline: "3px solid #15191d",
+          boxShadow: "0 0 0 4px #15191d, 0 12px 40px rgba(0,0,0,0.55)",
         }}
       >
+        {/* roof */}
+        <div className="absolute" style={{ left: -10, top: -30, width: WORLD_W + 20, height: 30, background: "#242a30", border: "3px solid #12161a" }}>
+          {Array.from({ length: 26 }).map((_, i) => (
+            <div key={i} className="absolute" style={{ left: 4 + i * 25, top: 6, width: 20, height: 6, background: "#2e363d" }} />
+          ))}
+          <div className="absolute" style={{ left: 120, top: -14, width: 40, height: 16, background: "#39424a", border: "2px solid #12161a" }} />
+          <div className="absolute" style={{ left: 300, top: -22, width: 8, height: 24, background: "#39424a", border: "2px solid #12161a" }} />
+          <div className="absolute" style={{ left: 520, top: -30, width: 2, height: 32, background: "#12161a" }} />
+          <div className="absolute" style={{ left: 508, top: -30, width: 26, height: 2, background: "#12161a" }} />
+        </div>
+
         {FLOORS.map((floor) => {
           const view = statusByStage[floor.stageId];
           return (
@@ -204,7 +241,15 @@ export function GameScene({ stageViews, animate, onEnterStation, modalOpen }: Ga
           );
         })}
 
-        <Player x={pos.x} y={pos.y} facing={facing} walking={walking} animate={animate} />
+        {/* exterior downpipe running the full height */}
+        <div className="pointer-events-none absolute" style={{ left: WORLD_W - 22, top: 0, width: 14, height: WORLD_H, background: "#39424a", border: "2px solid #12161a", zIndex: 45 }}>
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={i} className="absolute" style={{ left: -3, top: 30 + i * 80, width: 16, height: 6, background: "#4c575f", border: "1px solid #12161a" }} />
+          ))}
+        </div>
+
+        <Player x={pos.x} y={pos.y} facing={facing} walking={walking} animate={animate} phase={phase} />
+
 
         {promptLabel && (
           <div
