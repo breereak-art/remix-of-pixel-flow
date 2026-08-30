@@ -142,3 +142,184 @@
     color: var(--color-foreground);
   }
 }
+
+/* ===================== PROJECT: NEURO design system ===================== */
+
+@theme {
+  --color-exterior: #15191d;
+  --color-shell: #20252b;
+  --color-steel: #3d464d;
+  --color-olive: #526046;
+  --color-olive-dark: #35402e;
+  --color-wood: #6a4b2c;
+  --color-lamp: #d4a24c;
+  --color-active: #f2c94c;
+  --color-done: #74d66a;
+  --color-idle: #8a969f;
+  --color-drafting: #ffca3a;
+  --color-writing: #42a5f5;
+  --color-publish: #b56bff;
+  --color-danger: #e35b5b;
+  --color-sky: #2875b9;
+  --color-cream: #f3e7c6;
+  --color-paper: #e9d9a6;
+
+  --font-pixel: "Silkscreen", "Courier New", monospace;
+  --font-ui: "IBM Plex Mono", ui-monospace, monospace;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+}
+
+:root {
+  --background: oklch(0.19 0.012 250);
+  --foreground: oklch(0.93 0.03 85);
+  --card: oklch(0.24 0.014 250);
+  --card-foreground: oklch(0.93 0.03 85);
+  --popover: oklch(0.22 0.014 250);
+  --popover-foreground: oklch(0.93 0.03 85);
+  --primary: oklch(0.84 0.15 88);
+  --primary-foreground: oklch(0.2 0.02 250);
+  --secondary: oklch(0.3 0.016 250);
+  --secondary-foreground: oklch(0.93 0.03 85);
+  --muted: oklch(0.28 0.014 250);
+  --muted-foreground: oklch(0.73 0.02 250);
+  --accent: oklch(0.32 0.02 250);
+  --accent-foreground: oklch(0.93 0.03 85);
+  --destructive: oklch(0.62 0.17 25);
+  --destructive-foreground: oklch(0.97 0.01 90);
+  --border: oklch(0.35 0.016 250);
+  --input: oklch(0.35 0.016 250);
+  --ring: oklch(0.84 0.15 88);
+  --radius: 0.125rem;
+}
+
+body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+@utility pixelated {
+  image-rendering: pixelated;
+}
+
+/* Chunky 2px inset/outset pixel frame, no border radius. */
+@utility pixel-frame {
+  border: 2px solid #15191d;
+  box-shadow:
+    inset 0 0 0 2px rgba(243, 231, 198, 0.08),
+    0 2px 0 0 rgba(0, 0, 0, 0.55);
+}
+
+@utility pixel-frame-light {
+  border: 2px solid #15191d;
+  box-shadow:
+    inset 0 0 0 2px rgba(0, 0, 0, 0.12),
+    0 2px 0 0 rgba(0, 0, 0, 0.4);
+}
+
+@utility label-pixel {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+@utility grain {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px);
+    background-size: 3px 3px;
+  }
+}
+
+@utility no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@keyframes neuro-step {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+}
+
+@keyframes neuro-leg-a {
+  0%,
+  100% {
+    height: 6px;
+  }
+  50% {
+    height: 3px;
+  }
+}
+
+@keyframes neuro-leg-b {
+  0%,
+  100% {
+    height: 3px;
+  }
+  50% {
+    height: 6px;
+  }
+}
+
+@keyframes neuro-blink {
+  0%,
+  60% {
+    opacity: 1;
+  }
+  61%,
+  100% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes neuro-pop {
+  0% {
+    transform: translateY(4px) scale(0.96);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes neuro-sparkle {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Visible keyboard focus everywhere. */
+:where(button, a, input, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-active);
+  outline-offset: 2px;
+}
