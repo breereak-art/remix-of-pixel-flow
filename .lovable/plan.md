@@ -68,7 +68,7 @@ type PeekPayload = { floorId: WorkFloorId; state: FloorState; updatedAt: string;
 ## 4. Adapter design
 
 `src/lib/agentRunAdapter.ts` exports the `AgentRunAdapter` type (`subscribe`, `sendSteeringNote`, `getPeekPayload`) plus a single `getAdapter()` seam.
-`src/lib/mockAgentRunAdapter.ts` implements it with a timed script, exposes `pause()/resume()/next()/reset()` on a separate demo-control object, and simulates note lifecycle: `queued` → `delivered` (~1.5s) → `read` at the next agent step. Swapping in a real backend means writing one new file and changing `getAdapter()`.
+`src/lib/mockAgentRunAdapter.ts` implements it with a timed script, exposes `pause()/resume()/next()/reset()` on a separate demo-control object, and simulates note lifecycle: `queued` → `delivered` (~1.5s) → `read` at the next agent step. On the frontend side, a real backend means one new adapter file plus a change to `getAdapter()` — but the backend side is real work (see Phase 6): the agent loop must emit a snapshot/event per step and must check-and-clear the steering-note queue before each next step. That is not covered by Phase 5 QA.
 `src/data/toolToFloorMap.ts` holds the default tool→floor map (search_web/fetch_url/browse/retrieval → research; outline/plan/structure → drafting; write/compose/revise → writing; format/export/deliver → publish) and `resolveFloor(tool, currentFloor)` falling back to current floor, else drafting. Raw tool names surface only in the dev view.
 
 ## 5. Waypoints and movement
