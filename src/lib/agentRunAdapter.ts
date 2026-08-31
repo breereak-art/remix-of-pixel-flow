@@ -1,4 +1,5 @@
 import type { AgentRunSnapshot, PeekPayload, SteeringNote, WorkFloorId } from "@/types/agentRun";
+import { createMockAgentRunAdapter } from "./mockAgentRunAdapter";
 
 /**
  * The single seam between HQ's UI and a live agent backend.
@@ -31,11 +32,7 @@ let bundle: AdapterBundle | null = null;
  * phase. Nothing else in the app needs to change.
  */
 export function getAdapter(): AdapterBundle {
-  if (!bundle) {
-    // Lazy require keeps the mock out of the module graph until first use.
-    const { createMockAgentRunAdapter } = require("./mockAgentRunAdapter") as typeof import("./mockAgentRunAdapter");
-    bundle = createMockAgentRunAdapter();
-  }
+  if (!bundle) bundle = createMockAgentRunAdapter();
   return bundle;
 }
 
