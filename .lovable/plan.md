@@ -95,9 +95,10 @@ Research "Searching sources" → Research "Reading source material" → Research
 
 1. **Glance foundation** — remove workflow app; types, adapter + mock snapshot, world layout, AppShell, HQStatusRail, BuildingScene, five OfficeFloors with idle/active/done art and residue, static Agent-NPC and Player Avatar placeholders.
 2. **Movement + live simulation** — waypoint path, `useAgentMovement`, walk/work frames, timed mock events, activity log accumulation, demo controls.
-3. **Note + Peek** — StickyNoteComposer (active floor only, 280 chars, counter, Cmd/Ctrl+Enter, Escape blurs), NotesReceipt with statuses and retry, PeekPanel + PeekContentRenderer (safe rendering, JSON fallback).
-4. **Player avatar + Dino Cabinet** — WASD/arrow movement with collision, desk interaction to Peek, mobile d-pad, dino easter egg.
+3. **Note + Peek** — Peek opens by clicking the floor / desk / floor label (no avatar required, so this phase does not depend on Phase 4), PeekPanel + PeekContentRenderer (safe rendering, JSON fallback), StickyNoteComposer (active floor only, 280 chars, counter, Cmd/Ctrl+Enter, Escape blurs), NotesReceipt with statuses and retry.
+4. **Player avatar + Dino Cabinet** — WASD/arrow movement with collision, avatar-adjacency `[E]` as an *additional* Peek trigger over the existing click trigger, mobile d-pad, dino easter egg.
 5. **Polish + QA** — reduced motion, responsive/mobile sheets, aria-live announcements, focus states, error/failed run states, Playwright pass with zero console errors.
+6. **Real adapter wiring** — replace the mock with a live adapter (SSE/WebSocket/polling) plus the two required backend hooks: emit a run snapshot/event per agent step, and check-and-clear the steering-note queue before each next step. Includes snapshot normalization via `resolveFloor`, reconnect/backoff, and a debug view showing raw tool names. Not covered by Phase 5; budget separate backend time. Acceptance: real tool calls move the NPC to the correct floor, Peek shows real payloads, a note submitted mid-run reaches the agent and advances queued → delivered → read, disconnect shows a truthful "waiting/failed" status instead of a stale active floor.
 
 Each phase ends with: what was built, files changed, acceptance criteria passing, manual test steps, known limits, deferrals.
 
