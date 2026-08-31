@@ -106,7 +106,7 @@ Each phase ends with: what was built, files changed, acceptance criteria passing
 
 - Mock timings are a stand-in; real runs may burst updates — movement collapses stale transitions.
 - Rapid backend flips could cause visual thrash; mitigated by re-planning from the live position and only marking a floor active when the snapshot says so.
-- Frame-stepped CSS sprites are hand-built (no AI walk-cycle generation), so the character stays modest in size and swappable.
+- Walk frames come from a sourced, locally bundled CC0 spritesheet (Kenney or LPC-style, license-compatible, no share-alike), stepped with CSS `steps()` background offsets — not hand-pixeled from scratch and not AI-generated. Character components stay isolated so the sheet can be swapped later.
 - Notes are optimistic in the UI but always reflect adapter-confirmed status, including failure.
 - No backend, auth, or Cloud in this version; localStorage only for UI prefs, notes fallback, and demo state.
 
