@@ -19,7 +19,8 @@ routes/index.tsx
    ├─ BuildingScene       cutaway frame, sky, roof, stair column, scaling viewport
    │   ├─ OfficeFloor x5  (research, drafting, writing, publish, dino)
    │   │   ├─ FloorStateOverlay   lighting/glow/dim + residue props + state label
-   │   │   └─ InteractionPrompt   [E] Peek when player avatar is adjacent
+   │   │   ├─ floor/desk/label are semantic buttons → open Peek (baseline trigger)
+   │   │   └─ InteractionPrompt   optional [E] Peek on avatar adjacency (Phase 4 only)
    │   ├─ AgentNpc        PixelCharacter (amber), NPC-only, idle/walk/work
    │   └─ PlayerAvatar    PixelCharacter (teal), WASD/arrows/touch
    ├─ PeekPanel           drawer desktop / bottom sheet mobile → PeekContentRenderer
@@ -67,7 +68,7 @@ type PeekPayload = { floorId: WorkFloorId; state: FloorState; updatedAt: string;
 ## 4. Adapter design
 
 `src/lib/agentRunAdapter.ts` exports the `AgentRunAdapter` type (`subscribe`, `sendSteeringNote`, `getPeekPayload`) plus a single `getAdapter()` seam.
-`src/lib/mockAgentRunAdapter.ts` implements it with a timed script, exposes `pause()/resume()/next()/reset()` on a separate demo-control object, and simulates note lifecycle: `queued` → `delivered` (~1.5s) → `read` at the next agent step. Swapping in a real backend means writing one new file and changing `getAdapter()`.
+`src/lib/mockAgentRunAdapter.ts` implements it with a timed script, exposes `pause()/resume()/next()/reset()` on a separate demo-control object, and simulates note lifecycle: `queued` → `delivered` (~1.5s) → `read` at the next agent step. On the frontend side, a real backend means one new adapter file plus a change to `getAdapter()` — but the backend side is real work (see Phase 6): the agent loop must emit a snapshot/event per step and must check-and-clear the steering-note queue before each next step. That is not covered by Phase 5 QA.
 `src/data/toolToFloorMap.ts` holds the default tool→floor map (search_web/fetch_url/browse/retrieval → research; outline/plan/structure → drafting; write/compose/revise → writing; format/export/deliver → publish) and `resolveFloor(tool, currentFloor)` falling back to current floor, else drafting. Raw tool names surface only in the dev view.
 
 ## 5. Waypoints and movement
@@ -94,9 +95,10 @@ Research "Searching sources" → Research "Reading source material" → Research
 
 1. **Glance foundation** — remove workflow app; types, adapter + mock snapshot, world layout, AppShell, HQStatusRail, BuildingScene, five OfficeFloors with idle/active/done art and residue, static Agent-NPC and Player Avatar placeholders.
 2. **Movement + live simulation** — waypoint path, `useAgentMovement`, walk/work frames, timed mock events, activity log accumulation, demo controls.
-3. **Note + Peek** — StickyNoteComposer (active floor only, 280 chars, counter, Cmd/Ctrl+Enter, Escape blurs), NotesReceipt with statuses and retry, PeekPanel + PeekContentRenderer (safe rendering, JSON fallback).
-4. **Player avatar + Dino Cabinet** — WASD/arrow movement with collision, desk interaction to Peek, mobile d-pad, dino easter egg.
+3. **Note + Peek** — Peek opens by clicking the floor / desk / floor label (no avatar required, so this phase does not depend on Phase 4), PeekPanel + PeekContentRenderer (safe rendering, JSON fallback), StickyNoteComposer (active floor only, 280 chars, counter, Cmd/Ctrl+Enter, Escape blurs), NotesReceipt with statuses and retry.
+4. **Player avatar + Dino Cabinet** — WASD/arrow movement with collision, avatar-adjacency `[E]` as an *additional* Peek trigger over the existing click trigger, mobile d-pad, dino easter egg.
 5. **Polish + QA** — reduced motion, responsive/mobile sheets, aria-live announcements, focus states, error/failed run states, Playwright pass with zero console errors.
+6. **Real adapter wiring** — replace the mock with a live adapter (SSE/WebSocket/polling) plus the two required backend hooks: emit a run snapshot/event per agent step, and check-and-clear the steering-note queue before each next step. Includes snapshot normalization via `resolveFloor`, reconnect/backoff, and a debug view showing raw tool names. Not covered by Phase 5; budget separate backend time. Acceptance: real tool calls move the NPC to the correct floor, Peek shows real payloads, a note submitted mid-run reaches the agent and advances queued → delivered → read, disconnect shows a truthful "waiting/failed" status instead of a stale active floor.
 
 Each phase ends with: what was built, files changed, acceptance criteria passing, manual test steps, known limits, deferrals.
 
@@ -104,7 +106,7 @@ Each phase ends with: what was built, files changed, acceptance criteria passing
 
 - Mock timings are a stand-in; real runs may burst updates — movement collapses stale transitions.
 - Rapid backend flips could cause visual thrash; mitigated by re-planning from the live position and only marking a floor active when the snapshot says so.
-- Frame-stepped CSS sprites are hand-built (no AI walk-cycle generation), so the character stays modest in size and swappable.
+- Walk frames come from a sourced, locally bundled CC0 spritesheet (Kenney or LPC-style, license-compatible, no share-alike), stepped with CSS `steps()` background offsets — not hand-pixeled from scratch and not AI-generated. Character components stay isolated so the sheet can be swapped later.
 - Notes are optimistic in the UI but always reflect adapter-confirmed status, including failure.
 - No backend, auth, or Cloud in this version; localStorage only for UI prefs, notes fallback, and demo state.
 
