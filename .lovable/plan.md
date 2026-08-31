@@ -19,7 +19,8 @@ routes/index.tsx
    ├─ BuildingScene       cutaway frame, sky, roof, stair column, scaling viewport
    │   ├─ OfficeFloor x5  (research, drafting, writing, publish, dino)
    │   │   ├─ FloorStateOverlay   lighting/glow/dim + residue props + state label
-   │   │   └─ InteractionPrompt   [E] Peek when player avatar is adjacent
+   │   │   ├─ floor/desk/label are semantic buttons → open Peek (baseline trigger)
+   │   │   └─ InteractionPrompt   optional [E] Peek on avatar adjacency (Phase 4 only)
    │   ├─ AgentNpc        PixelCharacter (amber), NPC-only, idle/walk/work
    │   └─ PlayerAvatar    PixelCharacter (teal), WASD/arrows/touch
    ├─ PeekPanel           drawer desktop / bottom sheet mobile → PeekContentRenderer
