@@ -45,7 +45,7 @@ export function BuildingScene({ snapshot, reducedMotion, onPeek, playerEnabled }
     <div
       ref={viewportRef}
       className="relative h-full w-full overflow-hidden"
-      style={{ background: "linear-gradient(180deg,#101a26 0%,#1c3category 0%,#16222f 60%,#101720 100%)" }}
+      style={{ background: "#101720" }}
     >
       <div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(180deg,#132030 0%,#1b2c3d 55%,#101720 100%)" }} />
       {[
