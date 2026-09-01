@@ -82,7 +82,7 @@ export function BuildingScene({ snapshot, reducedMotion, onPeek, playerEnabled }
         {FLOORS.map((floor) => {
           const work = isWorkFloor(floor.id);
           const state: FloorState | "hidden" = work
-            ? (snapshot?.floorStates[floor.id] ?? "idle")
+            ? (snapshot?.floorStates[floor.id as "research"] ?? "idle")
             : "hidden";
           return (
             <OfficeFloor
