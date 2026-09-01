@@ -323,3 +323,202 @@ body {
   outline: 2px solid var(--color-active);
   outline-offset: 2px;
 }
+
+/* ---------------------------- HQ characters ---------------------------- */
+
+.hq-char {
+  will-change: transform;
+}
+
+.hq-char-art {
+  position: relative;
+  image-rendering: pixelated;
+}
+
+.hq-char[data-facing="-1"] .hq-char-art {
+  transform: scaleX(-1);
+}
+
+.hq-shadow {
+  position: absolute;
+  left: 1px;
+  bottom: -2px;
+  width: 18px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 50%;
+}
+
+.hq-body {
+  position: absolute;
+  inset: 0;
+}
+
+.hq-torso {
+  position: absolute;
+  left: 4px;
+  top: 11px;
+  width: 12px;
+  height: 11px;
+  background: var(--outfit);
+  border: 1px solid #15191d;
+  box-shadow: inset 2px 0 0 var(--outfit-light);
+}
+
+.hq-head {
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 10px;
+  height: 10px;
+  background: var(--skin);
+  border: 1px solid #15191d;
+}
+
+.hq-hair {
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 10px;
+  height: 3px;
+  background: var(--hair);
+}
+
+.hq-eye {
+  position: absolute;
+  right: 1px;
+  top: 4px;
+  width: 2px;
+  height: 2px;
+  background: #15191d;
+}
+
+.hq-scarf {
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  width: 12px;
+  height: 2px;
+  background: var(--accent);
+}
+
+.hq-marker {
+  position: absolute;
+  left: 15px;
+  top: 14px;
+  width: 3px;
+  height: 5px;
+  background: var(--accent);
+}
+
+.hq-leg,
+.hq-arm {
+  position: absolute;
+  background: var(--outfit);
+  border: 1px solid #15191d;
+}
+
+.hq-leg {
+  left: 6px;
+  top: 21px;
+  width: 3px;
+  height: 6px;
+}
+
+.hq-leg-front {
+  left: 11px;
+  background: var(--outfit-light);
+}
+
+.hq-arm {
+  left: 3px;
+  top: 12px;
+  width: 3px;
+  height: 7px;
+}
+
+.hq-arm-front {
+  left: 14px;
+  background: var(--outfit-light);
+}
+
+/* Frame-stepped walk cycle: hooks write data-frame 0..3 each tick. */
+.hq-char[data-mode="walking"][data-frame="1"] .hq-leg-back,
+.hq-char[data-mode="walking"][data-frame="3"] .hq-leg-front {
+  height: 4px;
+  transform: translateX(-2px);
+}
+
+.hq-char[data-mode="walking"][data-frame="1"] .hq-leg-front,
+.hq-char[data-mode="walking"][data-frame="3"] .hq-leg-back {
+  height: 7px;
+  transform: translateX(2px);
+}
+
+.hq-char[data-mode="walking"][data-frame="1"] .hq-body,
+.hq-char[data-mode="walking"][data-frame="3"] .hq-body {
+  transform: translateY(-1px);
+}
+
+.hq-char[data-mode="walking"][data-frame="1"] .hq-arm-front,
+.hq-char[data-mode="walking"][data-frame="3"] .hq-arm-back {
+  transform: translateX(-2px) rotate(-12deg);
+}
+
+.hq-char[data-mode="walking"][data-frame="1"] .hq-arm-back,
+.hq-char[data-mode="walking"][data-frame="3"] .hq-arm-front {
+  transform: translateX(2px) rotate(12deg);
+}
+
+.hq-char[data-mode="working"] .hq-arm-front {
+  animation: hq-type 460ms steps(2, end) infinite;
+}
+
+@keyframes hq-type {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(2px);
+  }
+}
+
+.hq-badge {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  transform: translateX(-50%);
+  font-family: "Silkscreen", monospace;
+  font-size: 7px;
+  letter-spacing: 0.06em;
+  padding: 1px 3px;
+  color: #15191d;
+  background: #f2c94c;
+  border: 1px solid #15191d;
+  white-space: nowrap;
+}
+
+.hq-badge-player {
+  background: #6fe3d2;
+}
+
+.hq-pulse {
+  animation: hq-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes hq-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hq-pulse,
+  .hq-char[data-mode="working"] .hq-arm-front {
+    animation: none;
+  }
+}

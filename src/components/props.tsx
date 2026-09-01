@@ -14,7 +14,7 @@ interface Box {
 
 const px = (style: React.CSSProperties) => ({ position: "absolute" as const, ...style });
 
-export function Desk({ x, y, w, h = 30, wood = "#7a5330", woodDark = "#4a3220" }: Box & { wood?: string; woodDark?: string }) {
+export function Desk({ x, y, w, h = 30, wood = "#7a5330", woodDark = "#4a3220" }: Omit<Box, "h"> & { h?: number; wood?: string; woodDark?: string }) {
   return (
     <div style={px({ left: x, top: y, width: w, height: h })}>
       <div style={px({ left: 0, top: 0, width: w, height: 7, background: wood, border: `1px solid ${INK}` })}>
@@ -31,7 +31,7 @@ export function Desk({ x, y, w, h = 30, wood = "#7a5330", woodDark = "#4a3220" }
   );
 }
 
-export function Monitor({ x, y, w = 26, h = 20, glow = "#6fd3ff", on = true }: Box & { glow?: string; on?: boolean }) {
+export function Monitor({ x, y, w = 26, h = 20, glow = "#6fd3ff", on = true }: Omit<Box, "w" | "h"> & { w?: number; h?: number; glow?: string; on?: boolean }) {
   return (
     <div style={px({ left: x, top: y, width: w, height: h + 6 })}>
       <div style={px({ left: 0, top: 0, width: w, height: h, background: "#20262c", border: `1px solid ${INK}` })}>
