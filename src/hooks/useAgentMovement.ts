@@ -189,14 +189,8 @@ export function useAgentMovement(
     return () => clearTimeout(t);
   }, [mode, openDoors]);
 
-  const floorOfY = (y: number) => {
-    let best = FLOORS[0]!;
-    for (const f of FLOORS) if (Math.abs(f.desk.y - y) < Math.abs(best.desk.y - y)) best = f;
-    return best;
-  };
-  void floorOfY;
-
   return {
+
     ref,
     mode,
     traveling,
