@@ -21,7 +21,7 @@ const STATUS_TEXT: Record<string, string> = {
 };
 
 export function AppShell() {
-  const { snapshot, actions } = useAgentRun();
+  const { snapshot, actions, sendNote, retryNote, fetchPeek } = useAgentRun();
   const reducedMotion = useReducedMotion();
   const [peekFloor, setPeekFloor] = useState<FloorId | null>(null);
 
