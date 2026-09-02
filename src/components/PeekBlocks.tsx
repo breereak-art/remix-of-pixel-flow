@@ -14,7 +14,7 @@ export function PeekBlocks({ blocks }: { blocks: PeekBlock[] }) {
   );
 }
 
-function Title({ children }: { children?: string }) {
+function Title({ children }: { children?: string | undefined }) {
   if (!children) return null;
   return <p className="label-pixel mb-1 text-[8px] text-idle">{children.toUpperCase()}</p>;
 }
