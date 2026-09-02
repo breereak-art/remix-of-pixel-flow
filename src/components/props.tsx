@@ -152,15 +152,57 @@ export function PaperStack({ x, y, w = 26, layers = 6, done = false }: { x: numb
   );
 }
 
-export function Door({ x, y, color = "#5a3b22", lit = false }: { x: number; y: number; color?: string; lit?: boolean }) {
+export function Door({
+  x,
+  y,
+  color = "#5a3b22",
+  lit = false,
+  open = false,
+}: {
+  x: number;
+  y: number;
+  color?: string;
+  lit?: boolean;
+  /** Swings the panel open when the agent passes between floors. */
+  open?: boolean;
+}) {
   return (
-    <div style={px({ left: x, top: y, width: 34, height: 60, background: color, border: `2px solid ${INK}` })}>
-      <div style={px({ left: 4, top: 6, width: 24, height: 18, background: lit ? "#f2c94c" : "rgba(255,255,255,0.12)", border: `1px solid ${INK}` })} />
-      <div style={px({ left: 4, top: 30, width: 24, height: 22, background: "rgba(0,0,0,0.18)", border: `1px solid ${INK}` })} />
-      <div style={px({ left: 26, top: 28, width: 4, height: 4, background: "#d8b45a" })} />
+    <div style={px({ left: x, top: y, width: 34, height: 60, zIndex: 20 })}>
+      {/* frame + doorway void behind the panel */}
+      <div style={px({ inset: 0, background: "#1b1410", border: `2px solid ${INK}` })} />
+      <div
+        style={px({
+          left: 3,
+          top: 4,
+          width: 28,
+          height: 52,
+          background: open
+            ? "linear-gradient(180deg,#f6dc95 0%,#c99a3f 60%,#5c451e 100%)"
+            : "#221a14",
+          opacity: open ? 1 : 0.9,
+          transition: "background 200ms steps(3), opacity 200ms steps(3)",
+        })}
+      />
+      {/* swinging panel */}
+      <div
+        style={px({
+          inset: 0,
+          background: color,
+          border: `2px solid ${INK}`,
+          transformOrigin: "left center",
+          transform: open ? "perspective(120px) rotateY(-72deg)" : "rotateY(0deg)",
+          transition: "transform 300ms steps(4)",
+          backfaceVisibility: "hidden",
+        })}
+      >
+        <div style={px({ left: 4, top: 6, width: 24, height: 18, background: lit ? "#f2c94c" : "rgba(255,255,255,0.12)", border: `1px solid ${INK}` })} />
+        <div style={px({ left: 4, top: 30, width: 24, height: 22, background: "rgba(0,0,0,0.18)", border: `1px solid ${INK}` })} />
+        <div style={px({ left: 26, top: 28, width: 4, height: 4, background: "#d8b45a" })} />
+      </div>
     </div>
   );
 }
+
 
 export function Cabinet({ x, y, w, h, wood = "#5a3f26" }: Box & { wood?: string }) {
   const drawers = Math.max(1, Math.round(h / 12));
