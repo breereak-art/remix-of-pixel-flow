@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { BuildingScene } from "./BuildingScene";
+import { PeekPanel } from "./PeekPanel";
+import { NotesReceipt } from "./NotesReceipt";
 import { useAgentRun } from "@/hooks/useAgentRun";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { FLOORS } from "@/data/worldLayout";
