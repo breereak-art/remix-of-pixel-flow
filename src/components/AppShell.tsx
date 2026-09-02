@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { BuildingScene } from "./BuildingScene";
+import { PeekPanel } from "./PeekPanel";
+import { NotesReceipt } from "./NotesReceipt";
 import { useAgentRun } from "@/hooks/useAgentRun";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { FLOORS } from "@/data/worldLayout";
@@ -19,7 +21,7 @@ const STATUS_TEXT: Record<string, string> = {
 };
 
 export function AppShell() {
-  const { snapshot, actions } = useAgentRun();
+  const { snapshot, actions, sendNote, retryNote, fetchPeek } = useAgentRun();
   const reducedMotion = useReducedMotion();
   const [peekFloor, setPeekFloor] = useState<FloorId | null>(null);
 
@@ -93,34 +95,23 @@ export function AppShell() {
                 ))}
               </ol>
             </section>
+
+            <NotesReceipt
+              notes={snapshot?.notes ?? []}
+              onRetry={(note) => void retryNote(note.text, note.floorId)}
+            />
           </aside>
         </div>
       </div>
 
       {peekFloor && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Peek"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-          onClick={() => setPeekFloor(null)}
-        >
-          <div className="pixel-frame max-w-md bg-card p-4" onClick={(e) => e.stopPropagation()}>
-            <p className="label-pixel text-[10px] text-primary">
-              {FLOORS.find((f) => f.id === peekFloor)?.name.toUpperCase()}
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">
-              Partial output for this floor arrives in the next build step.
-            </p>
-            <button
-              type="button"
-              onClick={() => setPeekFloor(null)}
-              className="pixel-frame label-pixel mt-3 bg-secondary px-3 py-2 text-[9px] text-foreground"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <PeekPanel
+          floorId={peekFloor}
+          snapshot={snapshot}
+          fetchPeek={fetchPeek}
+          onSendNote={sendNote}
+          onClose={() => setPeekFloor(null)}
+        />
       )}
     </main>
   );
