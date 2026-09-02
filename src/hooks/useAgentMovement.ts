@@ -7,7 +7,7 @@ import {
   CHAR_H,
   CHAR_W,
   FLOOR_BY_ID,
-  FLOORS,
+  
   type Point,
 } from "@/data/worldLayout";
 import type { WorkFloorId } from "@/types/agentRun";
