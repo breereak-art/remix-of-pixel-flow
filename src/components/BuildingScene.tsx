@@ -93,11 +93,12 @@ export function BuildingScene({ snapshot, reducedMotion, onPeek, playerEnabled }
               onPeek={onPeek}
               peekable={work && state !== "idle"}
               agentHere={agent.visualFloorId === floor.id}
+              doorOpen={agent.openDoors.includes(floor.index)}
             />
           );
         })}
 
-        <AgentNpc innerRef={agent.ref} mode={agent.mode} description={agentDescription} />
+        <AgentNpc innerRef={agent.ref} mode={agent.mode} description={agentDescription} hidden={agent.inDoorway} />
         <PlayerAvatar innerRef={player.ref} />
       </div>
 
