@@ -9,37 +9,36 @@ const floorIndexOfY = (y: number) => {
   return best.index;
 };
 
+export type LegKind =
+  /** Normal walk along the floor band. */
+  | "walk"
+  /** Standing in the open doorway before stepping through. */
+  | "enter-door"
+  /** Travelling between floors, hidden inside the doorway. */
+  | "through-door";
+
+export interface Leg extends Point {
+  kind: LegKind;
+  /** Floor the doorway belongs to, for open/close animation. */
+  floorIndex: number;
+}
+
 /**
- * Deterministic waypoint route (no pathfinding): the agent leaves through the
- * door, uses the shared stairwell, passes every intermediate floor's stair
- * point, then walks in through the destination door to its desk.
+ * Doors are the only way between floors: the agent walks to its floor's door,
+ * the door opens, it steps through, and it comes out of the destination door.
  */
-export function buildAgentPath(from: Point, targetFloorId: WorkFloorId): Point[] {
+export function buildAgentPath(from: Point, targetFloorId: WorkFloorId): Leg[] {
   const target = FLOOR_BY_ID[targetFloorId];
   const fromIndex = floorIndexOfY(from.y);
   const fromFloor = FLOORS[fromIndex]!;
-  const path: Point[] = [];
 
   if (fromIndex === target.index) {
-    // Same floor: just walk along the band to the desk.
-    path.push({ x: target.desk.x, y: target.desk.y });
-    return path;
+    return [{ x: target.desk.x, y: target.desk.y, kind: "walk", floorIndex: target.index }];
   }
 
-  const inStairwell = Math.abs(from.x - fromFloor.stairs.x) < 12;
-  if (!inStairwell) {
-    path.push({ x: fromFloor.door.x, y: fromFloor.door.y });
-    path.push({ x: fromFloor.stairs.x, y: fromFloor.stairs.y });
-  }
-
-  const dir = target.index > fromIndex ? 1 : -1;
-  for (let i = fromIndex + dir; i !== target.index + dir; i += dir) {
-    const floor = FLOORS[i];
-    if (!floor) break;
-    path.push({ x: floor.stairs.x, y: floor.stairs.y });
-  }
-
-  path.push({ x: target.door.x, y: target.door.y });
-  path.push({ x: target.desk.x, y: target.desk.y });
-  return path;
+  return [
+    { x: fromFloor.door.x, y: fromFloor.door.y, kind: "enter-door", floorIndex: fromIndex },
+    { x: target.door.x, y: target.door.y, kind: "through-door", floorIndex: target.index },
+    { x: target.desk.x, y: target.desk.y, kind: "walk", floorIndex: target.index },
+  ];
 }
