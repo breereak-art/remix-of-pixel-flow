@@ -6,18 +6,27 @@ interface AgentNpcProps {
   mode: AgentMode;
   /** Screen-reader-only description of what the agent is doing. */
   description: string;
+  /** True while the agent is inside a doorway between floors. */
+  hidden?: boolean;
 }
 
 /**
  * The agent. Never accepts user input; its position comes from run state only.
  */
-export function AgentNpc({ innerRef, mode, description }: AgentNpcProps) {
+export function AgentNpc({ innerRef, mode, description, hidden = false }: AgentNpcProps) {
   return (
     <div
       ref={innerRef}
       className="hq-char hq-char-agent group"
       data-mode={mode}
-      style={{ position: "absolute", left: 0, top: 0, zIndex: 42 }}
+      style={{
+        position: "absolute",
+        left: 0,
+        top: 0,
+        zIndex: 42,
+        opacity: hidden ? 0 : 1,
+        transition: "opacity 140ms steps(2)",
+      }}
       tabIndex={0}
       role="img"
       aria-label={description}

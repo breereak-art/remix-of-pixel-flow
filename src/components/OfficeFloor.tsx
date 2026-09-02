@@ -47,9 +47,11 @@ interface OfficeFloorProps {
   onPeek?: (floorId: FloorId) => void;
   peekable: boolean;
   agentHere: boolean;
+  /** Doorway swung open while the agent passes through it. */
+  doorOpen?: boolean;
 }
 
-export function OfficeFloor({ floor, state, reducedMotion, onPeek, peekable, agentHere }: OfficeFloorProps) {
+export function OfficeFloor({ floor, state, reducedMotion, onPeek, peekable, agentHere, doorOpen = false }: OfficeFloorProps) {
   const worked = state === "done";
   const lit = state === "active";
   const displayState: FloorState = state === "hidden" ? "idle" : state;
@@ -105,7 +107,7 @@ export function OfficeFloor({ floor, state, reducedMotion, onPeek, peekable, age
       )}
 
       {/* door to the stairwell */}
-      <Door x={floor.door.x - floor.top * 0 - 16} y={FLOOR_H - 24 - 46} lit={lit} />
+      <Door x={floor.door.x - 16} y={FLOOR_H - 24 - 46} lit={lit} open={doorOpen} />
 
       {/* stair column */}
       <div style={px({ left: STAIR_X, top: 0, width: STAIR_W, height: FLOOR_H, background: "#2b3238", borderLeft: `3px solid ${INK}` })}>
