@@ -166,4 +166,5 @@ export const WORK_FLOORS = FLOORS.filter((f) => f.id !== "dino") as (FloorLayout
 /** Where the agent stands before the first backend snapshot arrives. */
 export const AGENT_HOME: Point = FLOOR_BY_ID.research.desk;
 
-export const PLAYER_START = { floorId: "drafting" as FloorId, x: 430, y: FLOOR_BY_ID.drafting.desk.y };
+/** Clear of every drafting-floor obstacle, a short walk from the stairwell. */
+export const PLAYER_START = { floorId: "drafting" as FloorId, x: 492, y: FLOOR_BY_ID.drafting.desk.y };
