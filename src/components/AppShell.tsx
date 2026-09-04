@@ -2,6 +2,7 @@ import { useState } from "react";
 import { BuildingScene } from "./BuildingScene";
 import { PeekPanel } from "./PeekPanel";
 import { NotesReceipt } from "./NotesReceipt";
+import { DinoCabinetPanel } from "./DinoCabinetPanel";
 import { useAgentRun } from "@/hooks/useAgentRun";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { FLOORS } from "@/data/worldLayout";
@@ -104,7 +105,9 @@ export function AppShell() {
         </div>
       </div>
 
-      {peekFloor && (
+      {peekFloor === "dino" ? (
+        <DinoCabinetPanel onClose={() => setPeekFloor(null)} />
+      ) : peekFloor ? (
         <PeekPanel
           floorId={peekFloor}
           snapshot={snapshot}
@@ -112,7 +115,7 @@ export function AppShell() {
           onSendNote={sendNote}
           onClose={() => setPeekFloor(null)}
         />
-      )}
+      ) : null}
     </main>
   );
 }

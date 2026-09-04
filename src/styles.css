@@ -522,3 +522,26 @@ body {
     animation: none;
   }
 }
+
+/* Avatar adjacency prompt — optional trigger layered over floor clicks. */
+.hq-prompt {
+  position: absolute;
+  left: 50%;
+  top: -26px;
+  transform: translateX(-50%);
+  font-family: "Silkscreen", monospace;
+  font-size: 7px;
+  letter-spacing: 0.06em;
+  padding: 1px 3px;
+  color: #f3e7c6;
+  background: #15191dcc;
+  border: 1px solid #6fe3d2;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (hover: none) {
+  .hq-prompt {
+    display: none;
+  }
+}

@@ -2,10 +2,12 @@ import { PixelCharacter } from "./PixelCharacter";
 
 interface PlayerAvatarProps {
   innerRef: React.RefObject<HTMLDivElement | null>;
+  /** Adjacency prompt text, e.g. "[E] PEEK RESEARCH". Optional trigger layer. */
+  prompt?: string | null;
 }
 
 /** Optional human-controlled avatar. Never represents agent status. */
-export function PlayerAvatar({ innerRef }: PlayerAvatarProps) {
+export function PlayerAvatar({ innerRef, prompt }: PlayerAvatarProps) {
   return (
     <div
       ref={innerRef}
@@ -19,6 +21,11 @@ export function PlayerAvatar({ innerRef }: PlayerAvatarProps) {
       <span className="hq-badge hq-badge-player" aria-hidden>
         YOU
       </span>
+      {prompt && (
+        <span className="hq-prompt" aria-hidden>
+          {prompt}
+        </span>
+      )}
     </div>
   );
 }
