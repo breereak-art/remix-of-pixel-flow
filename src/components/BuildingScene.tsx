@@ -1,10 +1,11 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { FLOORS, WORLD_H, WORLD_W } from "@/data/worldLayout";
+import { FLOORS, FLOOR_BY_ID, WORLD_H, WORLD_W } from "@/data/worldLayout";
 import type { AgentRunSnapshot, FloorId, FloorState } from "@/types/agentRun";
 import { isWorkFloor } from "@/types/agentRun";
 import { OfficeFloor } from "./OfficeFloor";
 import { AgentNpc } from "./AgentNpc";
 import { PlayerAvatar } from "./PlayerAvatar";
+import { MobileControls } from "./MobileControls";
 import { useAgentMovement } from "@/hooks/useAgentMovement";
 import { usePlayerMovement } from "@/hooks/useKeyboardMovement";
 
@@ -40,6 +41,9 @@ export function BuildingScene({ snapshot, reducedMotion, onPeek, playerEnabled }
   const agentDescription = snapshot?.latestAction
     ? `Agent on the ${snapshot.latestAction.floorId} floor: ${snapshot.latestAction.label}`
     : "Agent waiting to start";
+
+  const playerFloor = FLOOR_BY_ID[player.floorId];
+  const playerFloorLabel = playerFloor.id === "dino" ? "the Dino Cabinet" : playerFloor.name;
 
   return (
     <div
@@ -91,7 +95,7 @@ export function BuildingScene({ snapshot, reducedMotion, onPeek, playerEnabled }
               state={state}
               reducedMotion={reducedMotion}
               onPeek={onPeek}
-              peekable={work && state !== "idle"}
+              peekable
               agentHere={agent.visualFloorId === floor.id}
               doorOpen={agent.openDoors.includes(floor.index)}
             />
@@ -99,12 +103,17 @@ export function BuildingScene({ snapshot, reducedMotion, onPeek, playerEnabled }
         })}
 
         <AgentNpc innerRef={agent.ref} mode={agent.mode} description={agentDescription} hidden={agent.inDoorway} />
-        <PlayerAvatar innerRef={player.ref} />
+        <PlayerAvatar
+          innerRef={player.ref}
+          prompt={playerEnabled ? (playerFloor.id === "dino" ? "[E] LOOK" : "[E] PEEK") : null}
+        />
       </div>
 
-      <p className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 label-pixel text-[8px] text-idle">
+      <p className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 hidden label-pixel text-[8px] text-idle lg:block">
         CLICK A FLOOR TO PEEK · WASD / ARROWS TO WALK · E TO PEEK WHERE YOU STAND
       </p>
+
+      <MobileControls player={player} onInteract={() => onPeek(player.floorId)} label={playerFloorLabel} />
     </div>
   );
 }
