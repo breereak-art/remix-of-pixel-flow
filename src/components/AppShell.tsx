@@ -104,7 +104,9 @@ export function AppShell() {
         </div>
       </div>
 
-      {peekFloor && (
+      {peekFloor === "dino" ? (
+        <DinoCabinetPanel onClose={() => setPeekFloor(null)} />
+      ) : peekFloor ? (
         <PeekPanel
           floorId={peekFloor}
           snapshot={snapshot}
@@ -112,7 +114,7 @@ export function AppShell() {
           onSendNote={sendNote}
           onClose={() => setPeekFloor(null)}
         />
-      )}
+      ) : null}
     </main>
   );
 }
